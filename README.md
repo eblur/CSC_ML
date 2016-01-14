@@ -1,4 +1,6 @@
 # CSC_ML
-Play with machine learning and the Chandra Source Catalog (CSC)
 
+## Astronomers Hack IAP (January 14, 2016)
+
+Play with machine learning and the Chandra Source Catalog (CSC)
 
