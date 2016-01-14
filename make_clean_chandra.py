@@ -8,8 +8,11 @@ def make_chandra_smaller(filename, max_err):
 
     # filter out stuff that's marginal
     chandra = chandra[chandra['SRC_QUALITY'] == 'TRUE    ']
-    # filter out stuff that's on a strak
+    # filter out stuff that's on a streak
     chandra = chandra[chandra['STREAK_SRC_FLAG'] == False]
+    # filter out HRC sources
+    chandra = chandra[chandra['EBAND'] != 'w']
+
     # filter out stuff that has large positionl errors
     chandra = chandra[chandra['ERR_ELLIPSE_R0'] < 2.]
 
@@ -44,7 +47,7 @@ def make_chandra_smaller(filename, max_err):
     # 'SRC_AMPL_LOLIM_H',
     # 'SRC_AMPL_HILIM_H',
     # 'SRC_RDATA_W',
-     'SRC_AMPL_W',
+    #  'SRC_AMPL_W',
     # 'SRC_AMPL_LOLIM_W',
     # 'SRC_AMPL_HILIM_W',
      # 'EBAND_EXT',
@@ -64,6 +67,10 @@ def make_chandra_smaller(filename, max_err):
     # 'EXT_ROTANG_HILIM',
     ]
     chandra.keep_columns(keep)
+    for band in 'SMH':
+        chandra[band + '/B'] = chandra['SRC_AMPL_{0}'.format(band)] / chandra['SRC_AMPL_B']
+        chandra.remove_column('SRC_AMPL_{0}'.format(band))
+    chandra.remove_column('SRC_AMPL_B')
 
     chandra.write('chandra_filtered_small.fits')
 
